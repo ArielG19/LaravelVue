@@ -10,9 +10,9 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="cdn/bootstrap.css">
+        <link rel="stylesheet" href="/cdn/bootstrap.css">
         <!--Toas css-->
-        <link rel="stylesheet" href="cdn/toastr.css">
+        <link rel="stylesheet" href="/cdn/toastr.css">
 
     </head>
     <body>
@@ -30,13 +30,13 @@
                           </router-link>
                         </li>
                         <li class="nav-item">
-                          <router-link to="/contacto" params="" class="nav-link">
-                            Contacto
+                          <router-link to="/publicaciones" params="" class="nav-link">
+                            Publicaciones
                           </router-link>
                         </li>
                         <li class="nav-item">
-                          <router-link to="/nosotros" params="" class="nav-link">
-                            Nosotros
+                          <router-link to="/productos" params="" class="nav-link">
+                            Productos
                           </router-link>
 
                         </li>
@@ -54,15 +54,15 @@
                   </div>
               </div>
         </div>
-        <!--vue-->
-        <script src="cdn/vue.js"></script>
+        <!--vue no es necesario ya que al tener instalado vue con npm seria como tener dos cdn y marca error en consola
+        <script src="cdn/vue.js"></script>-->
         <!-- axios-->
-        <script src="cdn/axios.js"></script>
+        <script src="/cdn/axios.js"></script>
         
-        <script src="cdn/jquery.js"></script>
+        <script src="/cdn/jquery.js"></script>
 
-        <script src="cdn/bootstrap.js"></script>
-        <script src="cdn/toastr.js"></script>
+        <script src="/cdn/bootstrap.js"></script>
+        <script src="/cdn/toastr.js"></script>
         <script src="{{asset('js/app.js')}}"></script>
        </body>
 </html>

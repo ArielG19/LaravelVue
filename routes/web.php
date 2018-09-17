@@ -11,7 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 Route::resource('/post','PostController');
+Route::resource('/product','ProductController');
+
+/*debemos agragar el parametro any para que al compartir nuestra rutas de vue-router carguen
+ ya que si copiamos y pegamos en una nueva ventana no funcionan.
+ tambien el where para comparar las rutas q tenemos con una q no exista y devolver error 404
+*/
+Route::get('/{any?}', function () {
+    return view('welcome');
+})->where('any','.*');

@@ -1,8 +1,6 @@
 
 require('./bootstrap');
 
-//window.Vue = require('vue'); no es necesario ya que lo importamos con el cdn
-//Vue.component('example', require('./components/Example.vue'));
 
 import Vue from 'vue';
 import Router from 'vue-router';
@@ -11,26 +9,32 @@ Vue.use(Router);
 const router = new Router({
 	routes:[
 		{
+			//asignarle un nombre a la ruta en vue-router
+			//name:'home',
 			path:'/',
-			component:require('./components/home')
+			//component:require('./components/home')
 			//hecemos un require para usar un componente
-			//{template:'<div>Probando mi ruta home</div>'}
+			component:{template:'<div>Probando mi ruta home</div>'}
 		},
 		{
-			path:'/contacto',
-			component:require('./components/contacto')
-			//{template:'<div>Probando mi ruta contacto</div>'}
-
+			path:'/publicaciones',
+			component:require('./components/post')
+			
 		},
 		{
-			path:'/nosotros',
-			//component:require('./components/')
-			//{template:'<div>Probando mi ruta nosotros</div>'}
-
+			path:'/productos',
+			component:require('./components/product')
 		},
+		{
+			//ruta 404, con el * indicamos que cuando busque una ruta no definida ira al 404
+			//siempre colocarla al final por que sobreescibe
+			path:'*',
+			component:require('./components/404')
+		}
 	],
 	//esto agrega la clase active al link-router en el que estamos
-	linkExactActiveClass:'active'
+	linkExactActiveClass:'active',
+	mode:'history' //para quitar el # en la ruta
 });
 
 //despues de definir nuestras rutas debemos pasarlas a nuestra instancia de vue
