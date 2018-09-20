@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Post;
+use File;
 
 class PostController extends Controller
 {
@@ -37,10 +39,19 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        Post::create($request->all());
-        return;
+            $post = new Post();
+            $post->title = $request->title;
+            if($request->get('image'))
+            {
+                $file = $request->get('image');
+                $name = time().'.' . explode('/', explode(':', substr($file, 0, strpos($file, ';')))[1])[1];
+                \Image::make($request->get('image'))->save(public_path('images/').$name);              
+                $post->image = $name;
+            }
 
+            $post->save();
+
+           // return response()->json(['success' => 'You have successfully uploaded an image'], 200);      
     }
 
     /**

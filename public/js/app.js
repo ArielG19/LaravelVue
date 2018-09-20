@@ -45877,35 +45877,75 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-//este script es para este componente
-//el siguiente metodo es usado para montar y renderizar. Tiene que se mounted el metodo 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            posts: []
-
+            image: '',
+            newTitle: ''
         };
-    },
-    mounted: function mounted() {
-        //mouted esta siendo usado como created
-        this.getPost();
     },
 
     methods: {
-        getPost: function getPost() {
+        //metodo para optener la imagen
+        ImageChange: function ImageChange(e) {
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+            this.createImage(files[0]);
+        },
+        createImage: function createImage(file) {
+            var reader = new FileReader();
+            var vm = this;
+            reader.onload = function (e) {
+                vm.image = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        },
+        uploadImage: function uploadImage() {
             var _this = this;
 
-            //console.log('probando');
             var url = 'post';
-            axios.get(url).then(function (response) {
-                //agregamos.task.data para poder acceder a todos los registro y hacer la paginacion
-                _this.posts = response.data.data;
-                //console.log(response.data.data);
-                //this.pagination = response.data.pagination
+            axios.post(url, { image: this.image, title: this.newTitle }).then(function (response) {
+                _this.image = '';
+                _this.newTitle = '';
+                //ocultamos el modal
+                $('#create').modal('hide');
+                $('.modal-backdrop.show').hide();
+                toastr.success('Datos Guardados');
             }).catch(function (error) {
-                console.log(error);
+                _this.errors = error.response.data;
             });
         }
     }
@@ -45919,31 +45959,156 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "col-md-8 col-md-offset-2" },
-        _vm._l(_vm.posts, function(post) {
-          return _c("div", [
-            _c(
-              "div",
-              { staticClass: "alert alert-success", attrs: { role: "alert" } },
-              [
-                _vm._v(
-                  "\n                    " +
-                    _vm._s(post.title) +
-                    "\n                "
-                )
-              ]
-            )
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-md-6" }, [
+      _vm.image
+        ? _c("div", { staticClass: "col-md-4" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("img", {
+                staticClass: "img-responsive",
+                attrs: { src: _vm.image, height: "70", width: "90" }
+              })
+            ])
           ])
-        })
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-primary pull-right",
+          attrs: { href: "#", "data-toggle": "modal", "data-target": "#create" }
+        },
+        [_vm._v("Nuevo imagen")]
+      ),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          attrs: { action: "POST" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.uploadImage($event)
+            }
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "modal fade",
+              attrs: { id: "create", tabindex: "-1", role: "dialog" }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "modal-dialog", attrs: { role: "document" } },
+                [
+                  _c("div", { staticClass: "modal-content" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }, [
+                      _c("div", { staticClass: "col-md-8" }, [
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "" } }, [
+                            _vm._v("Imagen")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass: "form-control",
+                            attrs: { type: "file" },
+                            on: { change: _vm.ImageChange }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "title" } }, [
+                            _vm._v("Titulo")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.newTitle,
+                                expression: "newTitle"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", name: "title" },
+                            domProps: { value: _vm.newTitle },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.newTitle = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(1)
+                  ])
+                ]
+              )
+            ]
+          )
+        ]
       )
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Modal title")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { type: "submit", value: "Guardar" }
+        },
+        [_vm._v("Save image")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -46006,6 +46171,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //

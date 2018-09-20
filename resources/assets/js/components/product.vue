@@ -16,6 +16,7 @@
                                         <label for="name">Nombre</label>
                                         <input type="text" name="name" class="form-control" v-model="nuevoProducto">
                                     </div>
+                                    
                                 
                                 </div>
                                   <div class="modal-footer">
@@ -24,8 +25,8 @@
                                   </div>
                             </div>
                           </div>
-                        </div>
-                    </form>
+            </div>
+        </form>
 
         <div class="row">
             <div class="col-md-4">
