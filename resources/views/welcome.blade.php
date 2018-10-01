@@ -47,11 +47,9 @@
                     </div>
               </nav>
         
-              <router-view></router-view>
-              <div id="crud" class="container">
-                  <div>
-                  @yield('content')
-                  </div>
+              
+              <div class="container">
+                <router-view></router-view>
               </div>
         </div>
         <!--vue no es necesario ya que al tener instalado vue con npm seria como tener dos cdn y marca error en consola

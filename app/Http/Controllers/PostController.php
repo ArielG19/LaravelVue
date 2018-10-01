@@ -14,11 +14,28 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $post = Post::orderBy('id','DESC')->paginate(3);
-        return $post;
+        $title  = $request->get('title');
+
+        $Datos = Post::orderBy('id','DESC')
+        ->where('title', 'LIKE', "%".$title."%")
+        ->paginate(2);
+        //return $post;
+        
+        return [
+            'pagination' => [
+                'total'         => $Datos->total(),
+                'current_page'  => $Datos->currentPage(),
+                'per_page'      => $Datos->perPage(),
+                'last_page'     => $Datos->lastPage(),
+                'from'          => $Datos->firstItem(),
+                'to'            => $Datos->lastItem(),
+            ],
+            'Datos' => $Datos
+        ];
+        
     }
 
     /**

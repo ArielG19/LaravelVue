@@ -45909,16 +45909,144 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
+            Datos: [],
             image: '',
-            newTitle: ''
+            newTitle: '',
+            title: '', //agregamos la propiedad por la que queremos filtrar
+            offset: 3,
+            pagination: {
+                'total': 0,
+                'current_page': 0,
+                'per_page': 0,
+                'last_page': 0,
+                'from': 0,
+                'to': 0
+            }
         };
     },
+    mounted: function mounted() {
+        //mouted esta siendo usado como created
+        this.getPost();
+    },
 
+    computed: {
+        //funcion para filtrar
+        searchUser: function searchUser() {
+            var _this = this;
+
+            //return this.Datos.filter(newDatos => newDatos.title.includes(this.title));
+            return this.Datos.filter(function (newDatos) {
+                return newDatos.title.toLowerCase().includes(_this.title.toLowerCase());
+            });
+        },
+        isActived: function isActived() {
+            return this.pagination.current_page;
+        },
+        pagesNumber: function pagesNumber() {
+            if (!this.pagination.to) {
+                return [];
+            }
+
+            var from = this.pagination.current_page - this.offset;
+            if (from < 1) {
+                from = 1;
+            }
+
+            var to = from + this.offset * 2;
+            if (to >= this.pagination.last_page) {
+                to = this.pagination.last_page;
+            }
+
+            var pagesArray = [];
+            while (from <= to) {
+                pagesArray.push(from);
+                from++;
+            }
+            return pagesArray;
+        }
+    },
+    watch: {
+        //Con watch observa la fincion y ejecuta
+        //
+        title: function title() {
+            this.buscarTitle();
+        }
+    },
     methods: {
+        //con debounce lo que hacemos es dar un tiempo de espera para que la funcion busque dentro de los datos.
+        buscarTitle: _.debounce(function () {
+            this.getPost();
+        }, 1000),
+        getPost: function getPost(page) {
+            var _this2 = this;
+
+            //ademas del parametro page q pagina, pasamos title para buscar
+            var url = 'post?page=' + page + '&title=' + this.title;
+            axios.get(url).then(function (response) {
+                _this2.Datos = response.data.Datos.data;
+                _this2.pagination = response.data.pagination;
+                //console.log(response.data.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+
         //metodo para optener la imagen
         ImageChange: function ImageChange(e) {
             var files = e.target.files || e.dataTransfer.files;
@@ -45934,19 +46062,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             reader.readAsDataURL(file);
         },
         uploadImage: function uploadImage() {
-            var _this = this;
+            var _this3 = this;
 
             var url = 'post';
             axios.post(url, { image: this.image, title: this.newTitle }).then(function (response) {
-                _this.image = '';
-                _this.newTitle = '';
+                _this3.getPost();
+                _this3.image = '';
+                _this3.newTitle = '';
                 //ocultamos el modal
                 $('#create').modal('hide');
                 $('.modal-backdrop.show').hide();
                 toastr.success('Datos Guardados');
             }).catch(function (error) {
-                _this.errors = error.response.data;
+                _this3.errors = error.response.data;
             });
+        },
+
+        //metodo para cambiar de pagina 
+        changePage: function changePage(page) {
+            this.pagination.current_page = page;
+            this.getPost(page);
         }
     }
 });
@@ -45960,25 +46095,150 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-md-6" }, [
-      _vm.image
-        ? _c("div", { staticClass: "col-md-4" }, [
-            _c("div", { staticClass: "form-group" }, [
-              _c("img", {
-                staticClass: "img-responsive",
-                attrs: { src: _vm.image, height: "70", width: "90" }
-              })
-            ])
-          ])
-        : _vm._e(),
+    _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _c("ul", { staticClass: "list-group" }, [
+        _c("li", { staticClass: "list-group-item" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.title,
+                expression: "title"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { name: "title", type: "text", placeholder: "Buscar" },
+            domProps: { value: _vm.title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.title = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("br"),
       _vm._v(" "),
       _c(
         "a",
         {
-          staticClass: "btn btn-primary pull-right",
+          staticClass: "btn btn-primary btn-sm pull-right",
           attrs: { href: "#", "data-toggle": "modal", "data-target": "#create" }
         },
         [_vm._v("Nuevo imagen")]
+      ),
+      _vm._v(" "),
+      _c("table", { staticClass: "table" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.searchUser, function(newDatos) {
+            return _c("tr", [
+              _c("th", { attrs: { scope: "row" } }, [
+                _vm._v(_vm._s(newDatos.id))
+              ]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(newDatos.title))]),
+              _vm._v(" "),
+              _c("td", [
+                _c("img", {
+                  staticClass: "img-responsive",
+                  attrs: {
+                    src: "/images/" + newDatos.image,
+                    height: "70",
+                    width: "90"
+                  }
+                })
+              ])
+            ])
+          })
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "ul",
+        { staticClass: "pagination" },
+        [
+          _vm.pagination.current_page > 1
+            ? _c("li", { staticClass: "page-item" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.changePage(_vm.pagination.current_page - 1)
+                      }
+                    }
+                  },
+                  [_c("span", [_vm._v("Atras")])]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm._l(_vm.pagesNumber, function(page) {
+            return _c(
+              "li",
+              {
+                staticClass: "page-item",
+                class: [page == _vm.isActived ? "active" : ""]
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.changePage(page)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                          " +
+                        _vm._s(page) +
+                        "\n                        "
+                    )
+                  ]
+                )
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _vm.pagination.current_page < _vm.pagination.last_page
+            ? _c("li", { staticClass: "page-item" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "page-link",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.changePage(_vm.pagination.current_page + 1)
+                      }
+                    }
+                  },
+                  [_c("span", [_vm._v("Siguiente")])]
+                )
+              ])
+            : _vm._e()
+        ],
+        2
       ),
       _vm._v(" "),
       _c(
@@ -46005,10 +46265,25 @@ var render = function() {
                 { staticClass: "modal-dialog", attrs: { role: "document" } },
                 [
                   _c("div", { staticClass: "modal-content" }, [
-                    _vm._m(0),
+                    _vm._m(1),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-body" }, [
-                      _c("div", { staticClass: "col-md-8" }, [
+                      _c("div", [
+                        _vm.image
+                          ? _c("div", { staticClass: "col-md-4" }, [
+                              _c("div", { staticClass: "form-group" }, [
+                                _c("img", {
+                                  staticClass: "img-responsive",
+                                  attrs: {
+                                    src: _vm.image,
+                                    height: "70",
+                                    width: "90"
+                                  }
+                                })
+                              ])
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
                         _c("div", { staticClass: "form-group" }, [
                           _c("label", { attrs: { for: "" } }, [
                             _vm._v("Imagen")
@@ -46051,7 +46326,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(1)
+                    _vm._m(2)
                   ])
                 ]
               )
@@ -46063,6 +46338,20 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("id")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Titulo")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Imagen")])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
