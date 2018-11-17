@@ -2,16 +2,19 @@
       <div class="row">
             <div class="col-md-8 col-md-offset-2">
                         <br><br>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <input name="title" type="text" placeholder="Buscar" class="form-control" v-model="title">
-                            </li>
-                        </ul>     
+                            <!--Buscador ----------------------------------------------------------->
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <input name="title" type="text" placeholder="Buscar" class="form-control" v-model="title">
+                                </li>
+                            </ul> 
+                            <!--Fin ------------------------------------------------------------->   
+
                             <br>
                             <a href="#" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#create">Nuevo imagen</a>
 
                            
-                            
+                            <!--Mostrar post  -------------------------------------------------->
                             <div v-for="newDatos in searchUser" class="card" style="width: 18rem;">
                                 <img class="card-img-top" :src="'/images/' + newDatos.image" alt="Card image cap">
                                 <div class="card-body">
@@ -30,11 +33,10 @@
                                     </div>
                                 </div>
                             </div>
-
-                            
+                        <!--Fin -------------------------------------------------------------->                      
                                
                             <br>
-
+                        <!--Paginacion ------------------------------------------------------->        
                         <ul class="pagination">
                             <li v-if="pagination.current_page > 1" class="page-item">
                               <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page - 1)">
@@ -53,11 +55,10 @@
                                 <span>Siguiente</span>
                               </a>
                             </li>
-                      </ul>
-
-
-                          
-
+                        </ul>
+                        <!--Fin -------------------------------------------------------------->
+                        
+                        <!--Guardar post ----------------------------------------------------->
                         <form action="POST" v-on:submit.prevent="uploadImage">  
                                 <div class="modal fade" id="create" tabindex="-1" role="dialog">
                                         <div class="modal-dialog" role="document">
@@ -95,7 +96,7 @@
                                           </div>
                                     </div>
                         </form>
-
+                        <!--Fin -------------------------------------------------------------->
                        
             </div> 
         </div>
@@ -107,6 +108,7 @@
                 Datos:[],
                 image:'',
                 newTitle:'',
+                idPost:'',
                 title:'', //agregamos la propiedad por la que queremos filtrar
                 offset:3,
                 pagination:{
