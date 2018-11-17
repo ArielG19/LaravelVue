@@ -11,25 +11,29 @@
                             <a href="#" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#create">Nuevo imagen</a>
 
                            
-                             <table class="table">
-                            <thead>
-                                <tr>
-                                  <th scope="col">id</th>
-                                  <th scope="col">Titulo</th>
-                                  <th scope="col">Imagen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="newDatos in searchUser">
-                                  <th scope="row">{{ newDatos.id }}</th>
-                                  <td>{{ newDatos.title }}</td>
-                                  <td>
-                                    <img :src="'/images/' + newDatos.image" class="img-responsive" height="70" width="90">
-                                  </td>
-                                  
-                                </tr>
-                            </tbody>
-                        </table>
+                            
+                            <div v-for="newDatos in searchUser" class="card" style="width: 18rem;">
+                                <img class="card-img-top" :src="'/images/' + newDatos.image" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ newDatos.title }}</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    
+                                    
+                                    <a class="btn btn-primary" data-toggle="collapse" :href="'#collapse'+ newDatos.id" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        collapse
+                                    </a>
+                                     <div class="collapse" :id="'collapse' + newDatos.id">
+                                        <div class="card card-body">
+                                            {{ newDatos.title }}
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                               
+                            <br>
 
                         <ul class="pagination">
                             <li v-if="pagination.current_page > 1" class="page-item">
@@ -156,7 +160,6 @@
         },
         watch:{
             //Con watch observa la fincion y ejecuta
-            //
             title: function(){
                 this.buscarTitle();
             }
@@ -198,9 +201,11 @@
                 reader.readAsDataURL(file);
             },
             uploadImage(){
+                //console.log(this.newTitle,this.image);
                 var url = 'post';
                 axios.post(url,{image: this.image,title:this.newTitle})
                 .then(response => {
+                    
                     this.getPost();
                     this.image ='';
                     this.newTitle ='';                

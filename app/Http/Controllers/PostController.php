@@ -66,7 +66,7 @@ class PostController extends Controller
                 $post->image = $name;
             }
 
-            $post->save();
+            //$post->save();
 
            // return response()->json(['success' => 'You have successfully uploaded an image'], 200);      
     }
